@@ -1,0 +1,242 @@
+<!-- Buat sebuah aplikasi Book Store menggunakan html dengan prompt dan alert.
+    Tampilkan menu dengan pilihan menu :
+
+1. Daftar Buku (dapat memilih buku untuk dibeli. 
+Terdapat stock jumlah buku yang tersedia serta harga buku tersebut dan
+ dapat menginput berapa banyak buku yang ingin dibeli)
+
+2. Keranjang Belanja (dapat menghapus buku yang ada di keranjang 
+dan mengedit quantity bukunya. Qty buku yg terdapat di keranjang 
+belum menghapus jumlah stock yg ada pada daftar buku tetapi tidak 
+boleh melebihi jumlah stock)
+
+3. Payment ( menampilkan semua jenis ,quantity, dan harga dari 
+buku yg di keranjang. Dan user harus menginput uang sesuai 
+dengan total dari harga bukunya. Apa bila kurang maka tidak 
+berhasil membayar. Bila uang kelebihan maka akan menampillan
+ kembalian dari uang si user)
+
+4. Exit (keluar dari menu yang ditampilkan. 
+Menu akan selalu dilooping selama user tidak memilih untuk exit)
+
+notes : harga buku semua disama ratakan seharga @Rp. 11.000 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>
+let menu = true
+const KeranjangBuku = []
+const arrayBuku= ["Komik Naruto $t0ck20", "Komik Bleach $t0ck40", "Buku IPA $t0ck15", "Buku IPS $t0ck13"]    
+
+
+while (menu) {
+let opt = prompt(`
+1. List Buku 
+2. List Keranjang Buku
+3. Checkout Daftar Pinjaman Buku
+4. Exit`)
+
+let text = ""
+arrayBuku.forEach((val,index) => {
+ let arrBook = val.split("$t0ck") //[Komik Naruto ,20]
+ text += `${index+1}. ${arrBook[0].trim("")} Stock ${arrBook[1]} \n`
+})   
+
+
+if(opt==1) 
+{
+let addBook = Number(prompt("Buku dengan harga @Rp. 11.000,00 \n" + text + "Silahkan pilih nomor buku anda" ))
+
+if(isNaN(addBook) || addBook <= 0 || addBook > arrayBuku.length) {
+alert("input salah")
+}
+else
+{
+     let arrBook = arrayBuku[addBook-1].split("$t0ck");
+     let buku = arrBook[0].trim()
+     let stock = arrBook[1]
+
+    if(KeranjangBuku.find((val) => val.split("$QTY")[0] == buku))
+    {
+     alert(buku + " sudah ada dalam keranjang, silahkan ubah di keranjang untuk mengubah qty")
+    }
+    else{
+    
+     let qty =  prompt(`${buku} dengan stock ${stock}
+silahkan masukan qty yang ingin dibeli`)
+     if(isNaN(qty)) {
+        alert("input salah")
+     }
+     else if(qty > stock || qty <= 0) {
+        alert("input lebih sedikit/melebihi stock")
+     }
+     else
+     {
+     let newbook = buku + "$QTY" + qty
+        KeranjangBuku.push(newbook)
+    alert(buku + " dengan qty " + qty + " berhasil ditambahkan")
+     }
+     
+    }
+}
+}
+
+else if(opt==2) 
+{
+    
+if(!KeranjangBuku.length)
+{
+alert("isi keranjang buku anda terlebih dahulu!")
+}
+
+else
+{
+text = "List Buku yang dipinjaman \n"
+KeranjangBuku.forEach((val,index) => {
+     let arrBook = val.split("$QTY");
+     let buku = arrBook[0].trim()
+     let qty = arrBook[1]
+
+    text += `${index+1}. ${buku} qty ${qty} \n`
+}) 
+
+text += "Pilih buku :"
+
+let optKeranjang = (prompt(text))
+
+if(isNaN(optKeranjang) || optKeranjang <= 0 || optKeranjang > KeranjangBuku.length) {
+alert("input salah")
+}
+
+else
+{
+    let arrBook = KeranjangBuku[optKeranjang-1].split("$QTY");
+    let buku = arrBook[0].trim()
+    let qty = arrBook[1]
+    let selectedBook =  arrayBuku.find((val) => val.split("$t0ck")[0].trim() == buku);
+    let stock = selectedBook.split("$t0ck")[1]
+        // alert(stock)
+    let opt2 = prompt("1. Edit Qty " + buku +  "\n2. Hapus Buku " + buku)
+
+    if(opt2==1) {
+    let editqty = prompt(buku + " qty " + qty + "/" +stock+" \ndiubah menjadi : ")
+    if(isNaN(editqty)) {
+        alert("input salah")
+     }
+     else if(editqty > stock || editqty <= 0) {
+        alert("input lebih sedikit/melebihi stock")
+     }
+     else
+     {
+       KeranjangBuku[optKeranjang-1] = buku + "$QTY" + editqty
+       alert("qty " +  buku + " berhasil diedit menjadi " + editqty)
+     }
+     
+
+
+    }
+    else if(opt2 == 2)
+    {
+    KeranjangBuku.splice(optKeranjang-1,1)
+    alert(buku + " berhasil dihapus")
+    }
+    else
+    {
+    alert("input error")
+    }
+}
+}
+}   
+
+else if(opt==3) 
+{
+if(!KeranjangBuku.length)
+{
+alert("isi keranjang buku anda terlebih dahulu!")
+}
+
+else
+{   
+    
+text = "Daftar Keranjang Buku @Rp.11,000\n"
+let totalqty = 0;
+KeranjangBuku.forEach((val,index) => {
+    let arrBook = val.split("$QTY");
+     let buku = arrBook[0].trim()
+     let qty = arrBook[1]
+    
+     totalqty += Number(qty)
+
+    text += `${index+1}. ${buku} qty ${qty} \n`
+})
+let totalHarga =  (totalqty* 11000)
+text += "\n Total Harga Belanja adalah Rp." + totalHarga.toLocaleString() + "\n Silahkan Masukan Uang Anda" 
+
+let uangUser = Number(prompt(text))
+if(totalHarga > uangUser){
+    alert("Uang Anda Kurang")
+}
+else if(totalHarga == uangUser) {
+    KeranjangBuku.forEach((val,index) => {
+    let arrKeranjang = val.split("$QTY");
+     let bukuKeranjang = arrKeranjang[0].trim()
+     let qtyKeranjang = arrKeranjang[1]
+
+     arrayBuku.filter((v,i) => {
+        if(v.split("$t0ck")[0].trim() == bukuKeranjang) {
+         arrayBuku[i] = bukuKeranjang + "$t0ck" + Number(v.split("$t0ck")[1]-qtyKeranjang)
+        }
+    })
+   
+
+})
+
+alert("Transaksi Berhasil")
+    KeranjangBuku.splice(0,KeranjangBuku.length)
+
+} 
+else if(totalHarga < uangUser) {
+
+    KeranjangBuku.forEach((val,index) => {
+    let arrKeranjang = val.split("$QTY");
+     let bukuKeranjang = arrKeranjang[0].trim()
+     let qtyKeranjang = arrKeranjang[1]
+
+     arrayBuku.filter((v,i) => {
+        if(v.split("$t0ck")[0].trim() == bukuKeranjang) {
+         arrayBuku[i] = bukuKeranjang + "$t0ck" + Number(v.split("$t0ck")[1]-qtyKeranjang)
+        }
+    })
+   
+
+})
+
+alert("Transaksi Berhasil \n Kembalian anda adalah Rp." + (uangUser-totalHarga))
+    KeranjangBuku.splice(0,KeranjangBuku.length)
+
+}
+else {
+    alert("input salah")
+}
+}
+}
+
+else if(opt==4) 
+{
+    menu = false
+}
+    
+}
+
+</script>
