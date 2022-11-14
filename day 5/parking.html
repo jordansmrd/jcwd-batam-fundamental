@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking System</title>
+</head>
+<body>
+    
+</body>
+</html>
+
+<script>
+//write html code with prompt and alert about parking system
+//the first pop up will be a prompt to ask the user's vehicle
+//the 2nd one is to ask the user about their plate number
+//ask the user how long the vehicle is parked in hour and min . example = "12hour 53min"
+//in the end the user need to pay the parking bill 
+//car : first hour will be Rp.5000, the rest is Rp.4000
+//motorcycle : first hour will be Rp.3000, the rest is Rp.2000
+//prompt the vehicle type, plate number, duration , and total bill 
+//if the user's money less than the bill, the payment prompt won't be gone
+//show the alert after they successfully paid the bill. 
+let vehicle = 0;
+
+while (vehicle != 1 || vehicle != 2) 
+{ 
+  vehicle =  prompt(`
+Welcome to Purwadhika Parking Lot
+1. Car
+2. Motorcycle
+Please Input 1/2: `)
+}
+
+const licensePlate = prompt(`
+Please Input The Plate Number
+`)
+
+const strDuration = prompt(`
+How long have you parked your ${vehicle == 1? "Car" : "Motorcycle" } ?`)
+//example = "12hour 53min"
+// strDuration = "3hour 53min";
+const arrDuration = strDuration.toLowerCase().split(/[hourmin]/) .join("").split(" ")
+let hour = arrDuration[0]
+let min = arrDuration[1]
+
+const CalculatePayment = (veh) => {
+const totalTimeInHour = min > 0? Number(hour) +1 : Number(hour);
+
+const sumBill = (totalHour,firstHourRate, restHourRate) => {
+  return  ((totalHour-1) * restHourRate) + firstHourRate 
+}
+
+//6-1 * 4000 + 5000
+
+let totalBill = veh == 1? sumBill(totalTimeInHour, 5000, 4000) : sumBill(totalTimeInHour, 3000, 2000)
+
+return totalBill;
+}
+const Payment = CalculatePayment(vehicle)
+
+let text = `
+Vehicle : ${vehicle==1 ? "Car" : "Motorcycle"}
+License Plate : ${licensePlate} 
+Duration : ${strDuration.trim()}
+Total : Rp.${Number(Payment).toLocaleString()} 
+
+Input Your Payment: `
+let totalPayment = 0;
+while(totalPayment < Payment || isNaN(totalPayment))
+{
+totalPayment = prompt(text)
+}
+
+alert(`The Bill Has Been Paid, Your Change is Rp.${Number(totalPayment - Payment).toLocaleString()}
+Come Again and Thank you!`)
+
+
+</script>
