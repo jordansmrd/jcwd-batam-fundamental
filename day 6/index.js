@@ -251,7 +251,7 @@ class DB {
     if(!this.#connection){
       this.#initializeConnection()
     }
-       
+
     return this.#connection
   }
 }
@@ -309,7 +309,6 @@ console.log(e3.employeeName);
 
 
 //inheritance
-
 class Product {
   constructor(){
     this.productName
