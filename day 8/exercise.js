@@ -14,6 +14,42 @@
 // Create a method in that class to calculate total salary
 // Use inheritance concept
 
+
+//create class employee 
+//properties 
+// name 
+// company 
+// age
+
+
+//create class fulltimeEmployee extends  
+//property
+// workingTime = [7,8,9] 
+// workingTime = [{day_1 : 7} , {day_2 : 8} ]
+
+
+// method fulltimeEmployee => addworkinghour ( hour number)
+// method fulltimeEmployee => calculate salary 
+
+//create class parttimeEmployee extends employee
+// method parttimeEmployee => addworkinghour ( hour number)
+// method parttimeEmployee => calculate salary 
+
+
+// method addworkinghour(hour)
+// parameternya adalah number 
+// workingtime.push(hour)
+
+//method calculate salary 
+// call workingTime 
+// loop workingTime => agar dapat value hour per day 
+// if (value> 6) 
+// var after6 = value - 6 
+// salary = (after6 * 75k) + (6 * 100k)
+
+
+
+
 class Employee {
     constructor(name,company) {
         this.name = name, 
@@ -22,9 +58,10 @@ class Employee {
 }
 
 class FulltimeEmployee extends Employee {
-    #arrWorkingHour = []
+    #arrWorkingHour = [] //private 
     constructor(name,company) {
         super(name,company)
+
         this.salary = {
             beforeSix : 100000,
             afterSix : 75000
@@ -36,8 +73,10 @@ class FulltimeEmployee extends Employee {
         {
         throw new Error("invalid input")
         }
+
         let newDay = {
             ["Day_"+ Number(this.#arrWorkingHour.length+1) ] : hour
+            //{ Day_1 : 7 } 
         }
         this.#arrWorkingHour.push(newDay)
     }
@@ -50,6 +89,9 @@ class FulltimeEmployee extends Employee {
         let totalSalary = 0
 
         this.#arrWorkingHour.map((val) => {
+            // { Day_1 : 7} , {Day_2 : 8}
+            // key = Day_1
+            //val[key] = val["Day_1"] sama saja dengan val.Day_1 => 7
 
             for(let key in val) 
             {
@@ -60,6 +102,11 @@ class FulltimeEmployee extends Employee {
                 else
                 {
                    totalSalary += Number((6 * this.salary.beforeSix) + ((val[key] - 6) * this.salary.afterSix ))
+                    //6 * 100k = 600k 
+                    //7-6 = 1 . 1 * 75k = 75k 
+                    //8-6 = 2. 2* 75k =  150 + 600 = 750
+                    // totalsalary = 675k + 750k  => 1st day & 2nd day 
+
                 }
 
             }
@@ -122,20 +169,16 @@ class ParttimeEmployee extends Employee {
 let fulltime = new FulltimeEmployee("jordan", "purwadhika")
 let parttime = new ParttimeEmployee("jordan", "neurosoft")
 
-fulltime.addWorkingHour(24)
-fulltime.addWorkingHour(24)
 fulltime.addWorkingHour(7)
+fulltime.addWorkingHour(7)
+fulltime.addWorkingHour(8)
+fulltime.addWorkingHour(24)
 
-parttime.addWorkingHour(8)
-console.log(parttime);
 
-
-console.log(parttime.showTotalSalary());
+console.log(fulltime.showWorkingHour());
 console.log(fulltime.showTotalSalary());
-
-console.log(fulltime.showWorkingHour())
-
 console.log(fulltime);
+
 
 
 
@@ -145,12 +188,14 @@ console.log(fulltime);
 // Each player will take turns to shooting
 // Before shooting, players get a chance to get random items (health +10 or power +10)
 // The game will continue until one of the players has health < 0
+
 // Requirements : 
 // Create ShootingGame & Player class
 // ShootingGame class : 
 // constructor(player1, player2) → player objects as a parameter
 // getRandomItem() → return { health: 0 or 10, power: 0 or 10 }
 // start() → start shooting games
+
 // Player class :
 // Property → name, health (default 100), power (default 10)
 // hit(power) →  subtract player health
@@ -163,6 +208,20 @@ console.log(fulltime);
 // Show each player status after shooting
 // Show winner name
 
+
+// ShootingGame class : 
+// constructor(player1, player2) → player objects as a parameter
+// done getRandomItem() → return { health: 0 or 10, power: 0 or 10 }
+// start() → start shooting games
+
+
+// Player class :
+// Property → name, health (default 100), power (default 10)
+// done hit(power) →  subtract player health
+// done useItem(item) → apply item to player (increase health or power, based on result from getRandomItem())
+// done showStatus() → show player status (ex : “Player A (Health => 100, Power => 10) ”)
+
+
 class Player {
 constructor(name) {
     this.name = name
@@ -170,11 +229,24 @@ constructor(name) {
     this.power = 10
 } 
 hit (power){
+    //120 
+    // health = 100 - 120 
+    // health = -20
+    // health = 0
 this.health -= power
-this.health <0 ? this.health = 0 : this.health
-}
 
+
+this.health < 0 ? this.health = 0 : this.health
+}
 useItem(item){
+    // { power : 10 }
+    // object.keys(item)[0] = power 
+    // power == "health" ? 
+    //this.power += 10 
+    // 10 = 10 + 10 
+    // this.power = 20
+
+
     // console.log(item);
     if(Object.keys(item)[0] == "health") {
         this.health += Number(item.health);
@@ -183,7 +255,6 @@ useItem(item){
         this.power += Number(item.power);
     }
 }
-
 showStatus(){
     console.log( `Player ${this.name} (Health => ${this.health}, Power => ${this.power})`)
 }
@@ -196,13 +267,16 @@ class ShootingGame {
     }
 
     getRandomItem() {
+        // 1 - 10 
+        // random number <= 5 --> health --> randomnumber % 2 ==0 ? health : 10 else 0 
+        // random number > 5 --> power -->
         let randomNumber = Number((Math.random()*10) + 1)
         if ( randomNumber <= 5) {
-            return randomNumber > 5 ? { health : 10 } : { health : 0}
+            return randomNumber >2 ? { health : 10 } : { health : 0}
         }   
         else
         {
-            return randomNumber > 5 ? { power : 10 } : { power : 0}
+            return randomNumber >8 ? { power : 10 } : { power : 0}
         }
     }
 
@@ -212,19 +286,21 @@ class ShootingGame {
 
         while(this.player1.health > 0 && this.player2.health > 0  )
         {
-            let randomNumber = (Math.random()*10) + 1
+            let randomNumber = (Math.random()*2) + 1
             console.log(`Round ${round} Start!!`);
             this.player1.showStatus()
             this.player2.showStatus();
-            let itemPlayer1 = this.getRandomItem()
-            let itemPlayer2 = this.getRandomItem()
-            this.player1.useItem(itemPlayer1)
-            this.player2.useItem(itemPlayer2)
+            let itemPlayer1 = this.getRandomItem() // { power : 10}
+            let itemPlayer2 = this.getRandomItem() // { health : 10}
+            this.player1.useItem(itemPlayer1)// power : 20
+            this.player2.useItem(itemPlayer2) // health : 110
             console.log(`${this.player1.name} gained item ${Object.keys(itemPlayer1)[0]} +${itemPlayer1[Object.keys(itemPlayer1)[0]]} => ${this.player1[Object.keys(itemPlayer1)[0]]}`);
             console.log(`${this.player2.name} gained item ${Object.keys(itemPlayer2)[0]} +${itemPlayer2[Object.keys(itemPlayer2)[0]]} => ${this.player2[Object.keys(itemPlayer2)[0]]}`);
 
             if(randomNumber == 1 ) {
-                this.player2.hit(this.player1.power)
+                this.player2.hit(this.player1.power) //power player 1 = 20 
+                                                     // maka player 2 health = 100 -20 = 80
+                                                    // maka player 1 health = 100 -20 = 80
                 if(this.player2.health > 0) {
                     this.player1.hit(this.player2.power)
                 }
