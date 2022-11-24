@@ -17,7 +17,7 @@ function funcExcelSheet(values) {
     values = values.toUpperCase();
       let out = 0
       for (let i = 0; i < values.length; i++) {
-        out += (values.charCodeAt(pos) - 64) * Math.pow(26, values.length - i - 1);
+        out += (values.charCodeAt(i) - 64) * Math.pow(26, values.length - i - 1);
       }
       return out;
   }
